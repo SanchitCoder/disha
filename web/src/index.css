@@ -1,0 +1,16 @@
+@import "./styles/tokens.css";
+@import "./styles/skeuo.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html { font-size: 18px; }
+body { background: var(--paper); color: var(--ink); font-family: var(--font-body); -webkit-font-smoothing: antialiased; }
+#root { position: relative; z-index: 1; }
+h1, h2, h3, .font-display { font-family: var(--font-display); font-optical-sizing: auto; }
+.btn-big { @apply flex min-h-[56px] w-full items-center justify-center gap-3 rounded-2xl px-5 py-3 text-lg font-bold shadow-sm transition active:scale-[0.98] disabled:opacity-50; }
+.leaflet-container { border-radius: 1rem; }
+@keyframes pulse-ring { 0% { box-shadow: 0 0 0 0 rgba(192,50,43,.55); } 100% { box-shadow: 0 0 0 28px rgba(192,50,43,0); } }
+.rec { animation: pulse-ring 1.2s infinite; }
+@keyframes flash-red { 0%,100% { background: #FBEAE8; } 50% { background: #F2B8B3; } }
+.escalating { animation: flash-red .6s 3; }

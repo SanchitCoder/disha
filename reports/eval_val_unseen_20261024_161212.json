@@ -1,0 +1,381 @@
+{
+  "when": "2026-10-24T16:12:12",
+  "split": "val_unseen",
+  "n": 82,
+  "llm": false,
+  "thresholds": {
+    "t_emergency": 0.2,
+    "t_immediate": 0.3,
+    "t_same_day": 0.4,
+    "t_nurse_review": 0.62,
+    "ask_if_conf_below": 0.45,
+    "risk_margin": 0.15,
+    "tie_margin": 0.0,
+    "fallback_round_up": true,
+    "max_questions": 2,
+    "smooth_reasoning_with_llm": false,
+    "match_weights": {
+      "language": 0.35,
+      "distance": 0.3,
+      "skill": 0.2,
+      "rating": 0.15
+    },
+    "distance_cap_km": 12,
+    "t_follow_up": 0.5,
+    "urgency_prior_purity": 0.95
+  },
+  "macro_f1_care": 0.6091,
+  "macro_f1_urgency": 0.6997,
+  "accuracy_care": 0.7317,
+  "emergency_recall": 1.0,
+  "emergency_n": 16,
+  "false_emergency": 9,
+  "under_triage": 4,
+  "ndcg_at_3": 1.0,
+  "ndcg_cases": 41,
+  "ndcg_cases_with_empty_reference": 14,
+  "per_class_care": {
+    "paramedic_home_visit": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 9
+    },
+    "home_nursing": {
+      "precision": 0.92,
+      "recall": 1.0,
+      "f1": 0.958,
+      "support": 23
+    },
+    "lab_test_home": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 15
+    },
+    "teleconsultation": {
+      "precision": 1.0,
+      "recall": 0.429,
+      "f1": 0.6,
+      "support": 7
+    },
+    "emergency_112": {
+      "precision": 0.64,
+      "recall": 1.0,
+      "f1": 0.78,
+      "support": 16
+    },
+    "follow_up": {
+      "precision": 0.429,
+      "recall": 0.25,
+      "f1": 0.316,
+      "support": 12
+    }
+  },
+  "per_class_urgency": {
+    "scheduled": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 15
+    },
+    "same_day": {
+      "precision": 0.743,
+      "recall": 0.667,
+      "f1": 0.703,
+      "support": 39
+    },
+    "emergency": {
+      "precision": 0.64,
+      "recall": 1.0,
+      "f1": 0.78,
+      "support": 16
+    },
+    "none": {
+      "precision": 0.429,
+      "recall": 0.25,
+      "f1": 0.316,
+      "support": 12
+    }
+  },
+  "confusion_care": {
+    "labels": [
+      "paramedic_home_visit",
+      "home_nursing",
+      "lab_test_home",
+      "teleconsultation",
+      "emergency_112",
+      "follow_up"
+    ],
+    "matrix": [
+      [
+        0,
+        0,
+        0,
+        0,
+        9,
+        0
+      ],
+      [
+        0,
+        23,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        15,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        3,
+        0,
+        4
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        16,
+        0
+      ],
+      [
+        7,
+        2,
+        0,
+        0,
+        0,
+        3
+      ]
+    ]
+  },
+  "confusion_urgency": {
+    "labels": [
+      "scheduled",
+      "same_day",
+      "emergency",
+      "none"
+    ],
+    "matrix": [
+      [
+        15,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        26,
+        9,
+        4
+      ],
+      [
+        0,
+        0,
+        16,
+        0
+      ],
+      [
+        0,
+        9,
+        0,
+        3
+      ]
+    ]
+  },
+  "under_triage_cases": [
+    {
+      "id": "S0006",
+      "text": "सुबह से एसिडिटी है, डॉक्टर से सलाह चाहिए",
+      "gold": [
+        "teleconsultation",
+        "same_day"
+      ],
+      "pred": [
+        "follow_up",
+        "none"
+      ]
+    },
+    {
+      "id": "S0115",
+      "text": "सुबह से एसिडिटी है, डॉक्टर से सलाह चाहिए",
+      "gold": [
+        "teleconsultation",
+        "same_day"
+      ],
+      "pred": [
+        "follow_up",
+        "none"
+      ]
+    },
+    {
+      "id": "S0184",
+      "text": "सुबह से एसिडिटी है, डॉक्टर से सलाह चाहिए",
+      "gold": [
+        "teleconsultation",
+        "same_day"
+      ],
+      "pred": [
+        "follow_up",
+        "none"
+      ]
+    },
+    {
+      "id": "S0263",
+      "text": "सुबह से एसिडिटी है, डॉक्टर से सलाह चाहिए",
+      "gold": [
+        "teleconsultation",
+        "same_day"
+      ],
+      "pred": [
+        "follow_up",
+        "none"
+      ]
+    }
+  ],
+  "wrong_care_cases": [
+    {
+      "id": "S0006",
+      "text": "सुबह से एसिडिटी है, डॉक्टर से सलाह चाहिए",
+      "gold": "teleconsultation",
+      "pred": "follow_up"
+    },
+    {
+      "id": "S0014",
+      "text": "I want to book something for my mother",
+      "gold": "follow_up",
+      "pred": "paramedic_home_visit"
+    },
+    {
+      "id": "S0056",
+      "text": "papa ko do din se bukhar hai aur khansi bhi",
+      "gold": "paramedic_home_visit",
+      "pred": "emergency_112"
+    },
+    {
+      "id": "S0057",
+      "text": "I want to book something for my mother",
+      "gold": "follow_up",
+      "pred": "paramedic_home_visit"
+    },
+    {
+      "id": "S0097",
+      "text": "papa ko do din se bukhar hai aur khansi bhi",
+      "gold": "paramedic_home_visit",
+      "pred": "emergency_112"
+    },
+    {
+      "id": "S0115",
+      "text": "सुबह से एसिडिटी है, डॉक्टर से सलाह चाहिए",
+      "gold": "teleconsultation",
+      "pred": "follow_up"
+    },
+    {
+      "id": "S0117",
+      "text": "पापा को दो दिन से बुखार और खांसी है",
+      "gold": "paramedic_home_visit",
+      "pred": "emergency_112"
+    },
+    {
+      "id": "S0162",
+      "text": "पापा को दो दिन से बुखार और खांसी है",
+      "gold": "paramedic_home_visit",
+      "pred": "emergency_112"
+    },
+    {
+      "id": "S0178",
+      "text": "I want to book something for my mother",
+      "gold": "follow_up",
+      "pred": "paramedic_home_visit"
+    },
+    {
+      "id": "S0184",
+      "text": "सुबह से एसिडिटी है, डॉक्टर से सलाह चाहिए",
+      "gold": "teleconsultation",
+      "pred": "follow_up"
+    },
+    {
+      "id": "S0210",
+      "text": "papa ko do din se bukhar hai aur khansi bhi",
+      "gold": "paramedic_home_visit",
+      "pred": "emergency_112"
+    },
+    {
+      "id": "S0226",
+      "text": "papa ko do din se bukhar hai aur khansi bhi",
+      "gold": "paramedic_home_visit",
+      "pred": "emergency_112"
+    },
+    {
+      "id": "S0239",
+      "text": "I want to book something for my mother",
+      "gold": "follow_up",
+      "pred": "paramedic_home_visit"
+    },
+    {
+      "id": "S0250",
+      "text": "पापा को दो दिन से बुखार और खांसी है",
+      "gold": "paramedic_home_visit",
+      "pred": "emergency_112"
+    },
+    {
+      "id": "S0256",
+      "text": "पापा को दो दिन से बुखार और खांसी है",
+      "gold": "paramedic_home_visit",
+      "pred": "emergency_112"
+    },
+    {
+      "id": "S0263",
+      "text": "सुबह से एसिडिटी है, डॉक्टर से सलाह चाहिए",
+      "gold": "teleconsultation",
+      "pred": "follow_up"
+    },
+    {
+      "id": "S0267",
+      "text": "hello koi hai?",
+      "gold": "follow_up",
+      "pred": "home_nursing"
+    },
+    {
+      "id": "S0274",
+      "text": "I want to book something for my mother",
+      "gold": "follow_up",
+      "pred": "paramedic_home_visit"
+    },
+    {
+      "id": "S0277",
+      "text": "hello koi hai?",
+      "gold": "follow_up",
+      "pred": "home_nursing"
+    },
+    {
+      "id": "S0297",
+      "text": "पापा को दो दिन से बुखार और खांसी है",
+      "gold": "paramedic_home_visit",
+      "pred": "emergency_112"
+    },
+    {
+      "id": "S0317",
+      "text": "I want to book something for my mother",
+      "gold": "follow_up",
+      "pred": "paramedic_home_visit"
+    },
+    {
+      "id": "S0335",
+      "text": "I want to book something for my mother",
+      "gold": "follow_up",
+      "pred": "paramedic_home_visit"
+    }
+  ],
+  "latency_p50_s": 0.002,
+  "latency_p95_s": 0.011
+}

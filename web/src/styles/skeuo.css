@@ -1,0 +1,136 @@
+/* Soft skeuomorphic material recipes. Light source: top-left. */
+
+/* Raised paper card */
+.sk-card {
+  background: linear-gradient(180deg, #FCF9F3 0%, var(--card) 100%);
+  border: 1px solid rgba(120, 95, 60, 0.12);
+  border-radius: 24px;
+  box-shadow:
+    0 1px 0 var(--shadow-light) inset,
+    0 2px 4px rgba(70, 52, 30, 0.08),
+    0 12px 28px -8px var(--shadow-dark);
+}
+
+/* Inset well (inputs, tracks) */
+.sk-well {
+  background: var(--well);
+  border-radius: 18px;
+  box-shadow:
+    inset 0 2px 6px rgba(70, 52, 30, 0.22),
+    inset 0 -1px 0 var(--shadow-light);
+}
+
+/* Shared button behaviour */
+.sk-btn, .sk-btn-secondary, .sk-btn-sage, .sk-btn-alarm, .sk-btn-ghost {
+  display: inline-flex; align-items: center; justify-content: center; gap: .6rem;
+  min-height: 48px; padding: .75rem 1.25rem; border-radius: 18px;
+  font-weight: 600; cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent;
+  transition: transform .08s ease, box-shadow .08s ease, filter .15s ease;
+}
+
+/* Raised enamel button (primary) */
+.sk-btn {
+  background: linear-gradient(180deg, var(--neel-400) 0%, var(--neel-600) 55%, var(--neel-700) 100%);
+  color: #fff;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 2px 0 var(--neel-700),
+    0 8px 18px -6px rgba(31, 40, 101, 0.55);
+}
+.sk-btn:active {
+  transform: translateY(2px);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.35), 0 0 0 var(--neel-700);
+}
+
+/* Secondary: ivory with brass edge */
+.sk-btn-secondary {
+  background: linear-gradient(180deg, #FFFDF8 0%, #F1E8D6 100%);
+  color: var(--neel-700);
+  border: 1.5px solid var(--brass-600);
+  box-shadow: inset 0 1px 0 #fff, 0 2px 0 var(--brass-600), 0 8px 16px -8px var(--shadow-dark);
+}
+.sk-btn-secondary:active { transform: translateY(2px); box-shadow: inset 0 2px 5px rgba(70,52,30,.25), 0 0 0 var(--brass-600); }
+
+/* Status buttons */
+.sk-btn-sage {
+  color: #fff; background: linear-gradient(180deg, #6BA877 0%, var(--sage) 55%, #3C6E47 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.35), 0 2px 0 #3C6E47, 0 8px 18px -6px rgba(60,110,71,.55);
+}
+.sk-btn-alarm {
+  color: #fff; background: linear-gradient(180deg, #DB5A52 0%, var(--alarm) 55%, #8F2019 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.35), 0 2px 0 #8F2019, 0 8px 18px -6px rgba(143,32,25,.6);
+}
+.sk-btn-sage:active, .sk-btn-alarm:active { transform: translateY(2px); box-shadow: inset 0 2px 6px rgba(0,0,0,.35); }
+
+.sk-btn-ghost { background: transparent; color: var(--neel-700); }
+.sk-btn-ghost:hover { background: rgba(46, 58, 135, .08); }
+
+/* Disabled: flat and clearly unpressable */
+.sk-btn:disabled, .sk-btn-secondary:disabled, .sk-btn-sage:disabled, .sk-btn-alarm:disabled,
+.sk-btn[aria-disabled="true"] {
+  background: var(--well); color: #8A8073; border: 1px solid rgba(120,95,60,.18);
+  box-shadow: none; transform: none; cursor: not-allowed; filter: none;
+}
+
+/* Brass bezel ring */
+.sk-brass-ring {
+  background: conic-gradient(from 200deg, var(--brass-600), var(--brass-200), var(--brass-400), var(--brass-600), var(--brass-200), var(--brass-600));
+  border-radius: 9999px;
+  padding: 10px;
+  box-shadow: 0 10px 24px -8px var(--shadow-dark), inset 0 1px 1px rgba(255, 255, 255, 0.6);
+}
+
+/* Engraved text */
+.sk-engraved { text-shadow: 0 1px 0 #fff; }
+
+/* Subtle paper grain: add class "sk-grain" to <body> */
+.sk-grain::before {
+  content: ""; position: fixed; inset: 0; pointer-events: none; opacity: .06; z-index: 0;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* Header bar: ivory with a soft bottom shadow */
+.sk-header {
+  background: linear-gradient(180deg, #FFFCF5 0%, var(--card) 100%);
+  border-bottom: 1px solid rgba(120, 95, 60, .14);
+  box-shadow: 0 1px 0 var(--shadow-light) inset, 0 8px 20px -12px var(--shadow-dark);
+}
+
+/* Accessibility */
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 8px; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}
+
+/* Idle "breathing" glow for the mic dome */
+@keyframes sk-breathe { 0%,100% { box-shadow: inset 0 3px 6px rgba(255,255,255,.35), inset 0 -10px 18px rgba(0,0,0,.35), 0 0 0 0 rgba(91,103,181,.0), 0 4px 10px rgba(31,40,101,.45); }
+                        50%     { box-shadow: inset 0 3px 6px rgba(255,255,255,.35), inset 0 -10px 18px rgba(0,0,0,.35), 0 0 26px 8px rgba(91,103,181,.45), 0 4px 10px rgba(31,40,101,.45); } }
+.sk-breathe { animation: sk-breathe 3.2s ease-in-out infinite; }
+
+/* Keyboard-key answer chips */
+.sk-key {
+  display: flex; align-items: center; justify-content: center; gap: .6rem; width: 100%; min-height: 64px; padding: .75rem 1.25rem;
+  border-radius: 16px; font-size: 1.2rem; font-weight: 700; color: var(--ink); cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent;
+  background: linear-gradient(180deg, #FFFDF8, #EFE6D3); border: 1px solid rgba(120, 95, 60, .28);
+  box-shadow: inset 0 1px 0 #fff, 0 5px 0 #CDBF9F, 0 12px 14px -6px var(--shadow-dark);
+  transition: transform .08s ease, box-shadow .08s ease;
+}
+.sk-key:active, .sk-key[data-selected="true"] { transform: translateY(4px); box-shadow: inset 0 2px 5px rgba(70, 52, 30, .3), 0 1px 0 #CDBF9F; }
+.sk-key[data-selected="true"] { outline: 3px solid var(--brass-400); outline-offset: 2px; filter: drop-shadow(0 0 10px rgba(201, 150, 46, .6)); }
+.sk-key[data-tone="primary"] { color: #fff; background: linear-gradient(180deg, var(--neel-400), var(--neel-600) 60%, var(--neel-700)); border-color: var(--neel-700); box-shadow: inset 0 1px 0 rgba(255,255,255,.35), 0 5px 0 var(--neel-700), 0 12px 14px -6px rgba(31,40,101,.5); }
+.sk-key[data-tone="sage"] { color: #1F4A2A; border-color: var(--sage); background: linear-gradient(180deg, #F1FAF2, #D5EBD9); box-shadow: inset 0 1px 0 #fff, 0 5px 0 #8FBF98, 0 12px 14px -6px var(--shadow-dark); }
+.sk-key[data-tone="alarm"] { color: var(--alarm); border: 2px solid var(--alarm); background: linear-gradient(180deg, #FFF8F6, #FBE3E0); box-shadow: inset 0 1px 0 #fff, 0 5px 0 #E3A9A4, 0 12px 14px -6px var(--shadow-dark); }
+.sk-key:disabled { background: var(--well); color: #8A8073; box-shadow: none; transform: none; cursor: not-allowed; }
+
+/* Inset text field */
+.sk-input { width: 100%; background: var(--well); color: var(--ink); caret-color: var(--neel-700); border-radius: 18px; padding: .8rem 1rem; font-size: 1.05rem;
+  box-shadow: inset 0 2px 6px rgba(70, 52, 30, .22), inset 0 -1px 0 var(--shadow-light); border: 2px solid transparent; }
+.sk-input::placeholder { color: #85796A; }
+.sk-input:focus { outline: none; border-color: var(--focus); }
+
+/* Round brass-edged icon button */
+.sk-round { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 9999px; color: var(--neel-700); cursor: pointer; flex-shrink: 0;
+  background: linear-gradient(180deg, #FFFDF8, #EFE6D3); border: 1.5px solid var(--brass-600); box-shadow: inset 0 1px 0 #fff, 0 3px 0 var(--brass-600), 0 8px 12px -6px var(--shadow-dark); }
+.sk-round:active { transform: translateY(2px); box-shadow: inset 0 2px 4px rgba(70,52,30,.25); }
+
+@keyframes toast-in { from { opacity: 0; transform: translateY(-10px) scale(.96); } to { opacity: 1; transform: none; } }

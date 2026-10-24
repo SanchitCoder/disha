@@ -1,0 +1,18 @@
+import { chromium } from "playwright";
+const b = await chromium.launch();
+const ctx = await b.newContext({ viewport: { width: 375, height: 812 }, permissions: ["geolocation"], geolocation: { latitude: 28.54, longitude: 77.27 } });
+const p = await ctx.newPage();
+const errs = []; p.on("pageerror", (e) => errs.push("pageerror: " + e.message)); p.on("console", (m) => m.type() === "error" && errs.push("console: " + m.text().slice(0, 160)));
+p.on("requestfailed", (r) => errs.push("reqfail: " + r.url() + " " + r.failure()?.errorText));
+const step = async (name, fn) => { try { await fn(); console.log("OK  ", name); } catch (e) { console.log("FAIL", name, "-", e.message.split("\n")[0]); await p.screenshot({ path: `e2e-fail_${name.replace(/\W+/g, "_")}.png` }); return false; } return true; };
+await p.goto("http://localhost:5173/start", { waitUntil: "networkidle" });
+await step("type + send", async () => { await p.fill("textarea >> nth=0", "papa ko do din se bukhar hai aur khansi bhi"); await p.getByRole("button", { name: /भेजें|Send/ }).last().click(); await p.waitForURL("**/q", { timeout: 25000 }); });
+await step("question shown", async () => { await p.waitForSelector("text=Kya saans lene mein dikkat ho rahi hai?", { timeout: 5000 }); await p.screenshot({ path: "e2e_q.png" }); });
+await step("answer Nahi -> plan", async () => { await p.getByRole("button", { name: "Nahi" }).click(); await p.waitForURL("**/plan", { timeout: 30000 }); await p.waitForSelector("text=paramedic", { timeout: 5000 }); await p.screenshot({ path: "e2e_plan.png" }); });
+await step("find caregiver -> book page", async () => { await p.getByRole("button", { name: /देखभालकर्ता चुनें|Find a caregiver/ }).click(); await p.waitForURL("**/book"); await p.waitForSelector("text=/Best match|सबसे अच्छा/"); await p.screenshot({ path: "e2e_book.png" }); });
+await step("book -> brief", async () => { await p.getByRole("button", { name: /बुक करें|Book/ }).first().click(); await p.waitForSelector("text=/Safety Net/", { timeout: 30000 }); await p.screenshot({ path: "e2e_booked.png" }); });
+await step("open check-in", async () => { await p.getByRole("button", { name: /हाल-चाल|Check-in/ }).click(); await p.waitForURL("**/checkin/**"); });
+await step("demo 6h -> question", async () => { await p.getByRole("button", { name: /Demo/ }).click(); await p.waitForSelector("text=/Mareez ab kaisa hai|How is the patient/", { timeout: 8000 }); await p.screenshot({ path: "e2e_checkin.png" }); });
+await step("reply -> emergency", async () => { await p.fill("input", "saans phool rahi hai"); await p.getByRole("button", { name: /भेजें|Send/ }).last().click(); await p.waitForURL("**/emergency", { timeout: 15000 }); await p.waitForSelector("a[href='tel:112']"); await p.screenshot({ path: "e2e_emergency.png" }); });
+console.log("errors:", errs.length ? errs : "none");
+await b.close();

@@ -1,0 +1,204 @@
+{
+  "when": "2026-10-24T16:44:46",
+  "split": "val_unseen",
+  "n": 82,
+  "llm": true,
+  "thresholds": {
+    "t_emergency": 0.2,
+    "t_immediate": 0.3,
+    "t_same_day": 0.4,
+    "t_nurse_review": 0.62,
+    "ask_if_conf_below": 0.45,
+    "risk_margin": 0.15,
+    "tie_margin": 0.0,
+    "fallback_round_up": true,
+    "max_questions": 2,
+    "smooth_reasoning_with_llm": false,
+    "match_weights": {
+      "language": 0.35,
+      "distance": 0.3,
+      "skill": 0.2,
+      "rating": 0.15
+    },
+    "distance_cap_km": 12,
+    "t_follow_up": 0.5,
+    "urgency_prior_purity": 0.95,
+    "clf_weight": 0.3,
+    "review_on_disagreement": true,
+    "t_emergency_offline": 0.7,
+    "t_immediate_offline": 0.7,
+    "disagreement_min_p": 0.6
+  },
+  "macro_f1_care": 1.0,
+  "macro_f1_urgency": 1.0,
+  "accuracy_care": 1.0,
+  "emergency_recall": 1.0,
+  "emergency_n": 16,
+  "false_emergency": 0,
+  "under_triage": 0,
+  "ndcg_at_3": 1.0,
+  "ndcg_cases": 54,
+  "ndcg_cases_with_empty_reference": 14,
+  "per_class_care": {
+    "paramedic_home_visit": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 9
+    },
+    "home_nursing": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 23
+    },
+    "lab_test_home": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 15
+    },
+    "teleconsultation": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 7
+    },
+    "emergency_112": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 16
+    },
+    "follow_up": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 12
+    }
+  },
+  "per_class_urgency": {
+    "scheduled": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 15
+    },
+    "same_day": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 39
+    },
+    "emergency": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 16
+    },
+    "none": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 12
+    }
+  },
+  "confusion_care": {
+    "labels": [
+      "paramedic_home_visit",
+      "home_nursing",
+      "lab_test_home",
+      "teleconsultation",
+      "emergency_112",
+      "follow_up"
+    ],
+    "matrix": [
+      [
+        9,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        23,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        15,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        7,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        16,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        12
+      ]
+    ]
+  },
+  "confusion_urgency": {
+    "labels": [
+      "scheduled",
+      "same_day",
+      "emergency",
+      "none"
+    ],
+    "matrix": [
+      [
+        15,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        39,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        16,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        12
+      ]
+    ]
+  },
+  "under_triage_cases": [],
+  "wrong_care_cases": [],
+  "latency_p50_s": 0.002,
+  "latency_p95_s": 60.337
+}

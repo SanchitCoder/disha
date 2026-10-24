@@ -1,0 +1,29 @@
+/* Disha design tokens — "Neel & Brass". Light comes from the top-left. */
+:root {
+  --paper: #F3ECDF;
+  --card: #FAF6EE;
+  --well: #E8DFCD;
+  --ink: #23201C;
+  --ink-muted: #6B6257;
+
+  --neel-700: #1F2865;
+  --neel-600: #2E3A87;
+  --neel-400: #5B67B5;
+
+  --brass-600: #A87A1E;
+  --brass-400: #C9962E;
+  --brass-200: #EBD7A6;
+
+  --sage: #4F8A5B;
+  --amber: #D98E1F;
+  --alarm: #C0322B;
+
+  --shadow-dark: rgba(70, 52, 30, 0.22);
+  --shadow-light: rgba(255, 255, 255, 0.85);
+
+  /* focus ring: brass-600 (3.7:1 on paper) — brass-400 alone fails the 3:1 non-text contrast rule */
+  --focus: var(--brass-600);
+
+  --font-display: "Fraunces", "Noto Sans Devanagari", Georgia, serif;
+  --font-body: "Inter", "Noto Sans Devanagari", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
