@@ -31,8 +31,8 @@ export default function Question() {
         </div>
       </SkCard>
       <div className="flex flex-col gap-4" role="group" aria-label={q}>
-        {last.app.follow_up_options.map((o) => (
-          <ChipKey key={o} selected={picked === o} disabled={busy} onClick={() => { setPicked(o); void submit(o); }}>{o}</ChipKey>
+        {last.app.follow_up_options.map((o, i) => (
+          <ChipKey key={o} data-testid={`answer-chip-${i}`} selected={picked === o} disabled={busy} onClick={() => { setPicked(o); void submit(o); }}>{o}</ChipKey>
         ))}
       </div>
       <form className="flex items-center gap-3" onSubmit={(e) => { e.preventDefault(); if (text.trim()) void submit(text); }}>

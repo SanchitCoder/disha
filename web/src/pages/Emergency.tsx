@@ -36,7 +36,7 @@ export default function Emergency() {
         </ol>
         {live && <p className="text-sm text-red-100">{live.triage.reasoning}</p>}
         <button onClick={share} className="sk-btn-secondary !min-h-[56px] !text-alarm"><MapPin size={20} aria-hidden />{tr("shareLoc", lang)}</button>
-        <button onClick={reset} className="text-center font-semibold text-red-100 underline underline-offset-4">{tr("start", lang)}</button>
+        <button onClick={reset} className="sk-textbtn mx-auto font-semibold text-red-100 underline underline-offset-4">{tr("start", lang)}</button>
       </div>
     </>
   );

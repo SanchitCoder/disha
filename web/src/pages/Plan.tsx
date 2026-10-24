@@ -1,7 +1,10 @@
 import { Ambulance, CheckCheck, Eye, TriangleAlert, FlaskConical, Home, Hourglass, ShieldCheck, Syringe, UserRoundSearch, Video, LucideIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-import { api, Taxonomy } from "../api";
+import { api, FamilyAction, Taxonomy } from "../api";
+import ActionPlan from "../components/ActionPlan";
+import DetailsCard from "../components/DetailsForm";
+import PatientInfo from "../components/PatientInfo";
 import Bi from "../components/Bi";
 import ListenButton from "../components/ListenButton";
 import SkButton from "../components/sk/SkButton";
@@ -26,7 +29,12 @@ export default function Plan() {
   const nav = useNavigate();
   const tax = useTaxonomy();
   const [confirmed, setConfirmed] = useState(false);
+  const [actions, setActions] = useState<FamilyAction[] | null>(null);
   const review = last?.app.needs_nurse_review && last.app.status === "awaiting_review";
+
+  useEffect(() => {          // the live plan (statuses change as steps are scheduled); the decision response carries a first copy
+    if (caseId) api.caseActions(caseId).then(setActions).catch(() => {});
+  }, [caseId, last?.triage.care_type]);
 
   useEffect(() => {          // nurse-in-the-loop: realtime (if Supabase configured) + polling fallback
     if (!review || !caseId) return;
@@ -50,14 +58,14 @@ export default function Plan() {
   return (
     <div className="flex flex-col gap-5 pb-6">
       <SkCard>
-        <div className="flex items-center gap-4">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
           <span className="sk-well grid h-20 w-20 shrink-0 place-items-center text-neel-600" style={{ borderRadius: 22 }}><Icon size={44} strokeWidth={1.8} aria-hidden /></span>
-          <div className="min-w-0 flex-1">
+          <div className="min-w-0 flex-[1_1_8rem]">
             <p className="text-sm font-semibold text-ink-muted"><Bi k="plan" /></p>
             <h1 className="text-[1.45rem] font-bold leading-tight text-neel-700 first-letter:uppercase">{careName}</h1>
           </div>
         </div>
-        <div className="mt-5 flex items-center justify-between gap-3 rounded-2xl bg-well/60 p-3">
+        <div className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-well/60 p-3">
           <UrgencyLight urgency={t.urgency ?? "scheduled"} lang={lang} />
           <ListenButton text={a.speak_text} auto />
         </div>
@@ -88,9 +96,13 @@ export default function Plan() {
       )}
       {confirmed && <div className="flex items-center gap-3 rounded-2xl border-2 border-sage bg-[#E4F1E6] p-4 text-lg font-semibold text-[#1F4A2A]" role="status"><ShieldCheck aria-hidden />{tr("nurseDone", lang)}</div>}
 
+      {caseId && <PatientInfo caseId={caseId} onPlan={setActions} />}
+      {caseId && <ActionPlan caseId={caseId} actions={actions ?? a.actions ?? []} setActions={setActions} />}
+      {caseId && <DetailsCard caseId={caseId} onPlan={setActions} />}
+
       <SkCard header={<span className="flex items-center gap-2"><Eye size={22} aria-hidden />{tr("dhyan", lang)}</span>}>
         <ul className="flex flex-col gap-2.5">
-          {a.watch_list.map((w) => (
+          {[...new Set([...(a.plan_watch_signs ?? []), ...a.watch_list])].map((w) => (
             <li key={w} className="flex gap-3 text-base">
               <span aria-hidden className="mt-1.5 h-3.5 w-3.5 shrink-0 rounded-full" style={{ background: "radial-gradient(circle at 35% 30%, #F8CF8A, var(--amber) 60%, #8A5508)", boxShadow: "0 0 8px rgba(217,142,31,.6)" }} />{w}
             </li>
@@ -99,8 +111,8 @@ export default function Plan() {
       </SkCard>
 
       <p className="text-center font-semibold text-ink-muted"><Bi k="notDiagnosis" /></p>
-      {!review && <SkButton size="xl" icon={UserRoundSearch} onClick={() => nav("/book")}>{tr("findCaregiver", lang)}</SkButton>}
-      <Link to="/start" className="text-center font-semibold text-neel-600 underline underline-offset-4" onClick={() => window.speechSynthesis?.cancel()}>{tr("start", lang)}</Link>
+      {!review && <SkButton size="xl" icon={UserRoundSearch} onClick={() => nav("/book")} data-testid="find-caregiver">{tr("findCaregiver", lang)}</SkButton>}
+      <Link to="/start" className="sk-textbtn mx-auto font-semibold text-neel-600 underline underline-offset-4" onClick={() => window.speechSynthesis?.cancel()}>{tr("start", lang)}</Link>
     </div>
   );
 }

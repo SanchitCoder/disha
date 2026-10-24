@@ -7,7 +7,7 @@ export default function CheckinClock({ hours = 0, size = 220 }: { hours?: number
   const minDeg = hours * 360;
   const t = reduce ? { duration: 0 } : { duration: 1.4, ease: "easeInOut" as const };
   return (
-    <svg width={size} height={size} viewBox="0 0 200 200" role="img" aria-label={`Safety Net clock, ${hours} hours ahead`}>
+    <svg width={size} height={size} viewBox="0 0 200 200" style={{ maxWidth: "100%", height: "auto" }} role="img" aria-label={`Safety Net clock, ${hours} hours ahead`}>
       <defs>
         <linearGradient id="rim" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#EBD7A6" /><stop offset=".45" stopColor="#C9962E" /><stop offset="1" stopColor="#8E6414" /></linearGradient>
         <radialGradient id="face" cx="40%" cy="32%" r="80%"><stop offset="0" stopColor="#FFFDF8" /><stop offset="1" stopColor="#EADFC8" /></radialGradient>

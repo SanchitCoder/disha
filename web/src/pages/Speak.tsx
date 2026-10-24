@@ -43,15 +43,15 @@ export default function Speak() {
       <SkCard>
         <label htmlFor="typed" className="mb-2 block text-sm font-semibold text-ink-muted"><Bi k="typeInstead" /></label>
         <SkTextarea id="typed" value={text} onChange={(e) => setText(e.target.value)} rows={2} placeholder={tr("example", lang)} />
-        <div className="mt-4"><SkButton size="lg" icon={SendHorizontal} disabled={!text.trim()} loading={busy && heard === null} onClick={() => submit(text)}>{tr("send", lang)}</SkButton></div>
+        <div className="mt-4"><SkButton size="lg" icon={SendHorizontal} disabled={!text.trim()} loading={busy && heard === null} onClick={() => submit(text)} data-testid="send-typed">{tr("send", lang)}</SkButton></div>
       </SkCard>
 
       {busy && <p className="text-center text-lg font-semibold text-neel-600" role="status">{tr("thinking", lang)}</p>}
       {error && <p className="rounded-2xl border border-alarm/30 bg-[#FBEAE8] p-3 text-alarm" role="alert">{tr("error", lang)} <span className="text-xs">{error}</span></p>}
 
-      <div className="sk-well mx-auto flex items-center gap-2 px-4 py-2 text-sm text-ink" style={{ borderRadius: 9999 }}>
+      <div className="sk-well mx-auto flex max-w-full flex-wrap items-center justify-center gap-x-2 px-4 py-1 text-sm text-ink" style={{ borderRadius: 24 }}>
         <MapPin size={16} className="text-brass-600" aria-hidden />{location.lat.toFixed(2)}, {location.lng.toFixed(2)}
-        <button onClick={changeLocation} className="ml-1 rounded px-1 font-semibold text-neel-600 underline underline-offset-2">{tr("changeLoc", lang)}</button>
+        <button onClick={changeLocation} className="sk-textbtn font-semibold text-neel-600 underline underline-offset-2">{tr("changeLoc", lang)}</button>
       </div>
     </div>
   );

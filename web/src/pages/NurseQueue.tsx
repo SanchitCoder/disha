@@ -1,11 +1,57 @@
 import { BellPlus, Brain, Check, PencilLine } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { api, ModelInfo, QueueItem, Taxonomy } from "../api";
+import { api, ClinicianAction, ModelInfo, QueueItem, Taxonomy } from "../api";
 import ConfidenceGauge from "../components/sk/ConfidenceGauge";
 import SkButton from "../components/sk/SkButton";
 import UrgencyLight from "../components/sk/UrgencyLight";
 import { tr, useLang } from "../i18n";
 import { watchCases } from "../lib/supabase";
+
+function ActionsToConfirm() {
+  const { lang } = useLang();
+  const [rows, setRows] = useState<ClinicianAction[]>([]);
+  const [msg, setMsg] = useState("");
+  const [edit, setEdit] = useState<Record<string, string>>({});
+  const load = useCallback(() => void api.nurseActions().then(setRows).catch(() => {}), []);
+  useEffect(() => { load(); const iv = setInterval(load, 4000); return () => clearInterval(iv); }, [load]);
+  async function confirm(id: string, withTime: boolean) {
+    setMsg("");
+    try { await api.confirm(id, withTime && edit[id] ? { slot: new Date(edit[id]).toISOString() } : {}); setRows((r) => r.filter((x) => x.id !== id)); }
+    catch (e) { setMsg((e as Error).message); }
+  }
+  if (!rows.length) return <p className="sk-card p-6 text-ink-muted" data-testid="no-actions">{tr("noActions", lang)}</p>;
+  return (
+    <div className="flex flex-col gap-4" data-testid="actions-to-confirm">
+      {msg && <p role="alert" className="rounded-2xl bg-[#FBEAE8] p-3 text-alarm">{msg}</p>}
+      {rows.map((r) => (
+        <div key={r.id} className="sk-card grid gap-4 p-4 md:grid-cols-[1fr_auto]" data-testid="action-row">
+          <div className="min-w-0">
+            <p className="text-lg font-bold">{r.title}</p>
+            <p className="text-sm text-ink-muted">{r.scheduled_for && new Date(r.scheduled_for).toLocaleString("en-IN", { weekday: "short", hour: "numeric", minute: "2-digit" })}{r.provider_name ? ` · ${r.provider_name}` : ""} · {r.care_type?.replace(/_/g, " ")}</p>
+            {r.clinician_suggestion && (
+              <p className="mt-2 rounded-xl border-2 border-brass-400 bg-[#FBF3DC] p-3 text-sm" data-testid="clinician-suggestion">
+                <b className="block text-xs uppercase tracking-wide text-brass-600">{tr("suggestedConfirm", lang)}</b>{r.clinician_suggestion}
+              </p>
+            )}
+            <div className="mt-2 grid gap-x-4 gap-y-1 text-sm sm:grid-cols-2">
+              <p><b>Patient: </b>{r.patient.relation}, {String(r.patient.age)}{r.patient.sex !== "unknown" ? `, ${r.patient.sex}` : ""}</p>
+              <p><b>Symptoms: </b>{(r.patient.symptoms ?? []).map((s: any) => `${s.name}${s.days ? ` ${s.days}d` : ""}`).join(", ") || "—"}</p>
+              {Object.keys(r.patient.vitals ?? {}).length > 0 && <p><b>Vitals: </b>{Object.entries(r.patient.vitals).map(([k, v]) => `${k.replace(/_/g, " ")} ${v}`).join(", ")}</p>}
+              {(r.patient.chronic ?? []).length > 0 && <p><b>Known: </b>{r.patient.chronic.join(", ")}</p>}
+              {(r.patient.medicines_reported ?? []).length > 0 && <p><b>Reported medication: </b>{r.patient.medicines_reported.join(", ")}</p>}
+              {(r.patient.allergies ?? []).length > 0 && <p><b>Allergies: </b>{r.patient.allergies.join(", ")}</p>}
+            </div>
+          </div>
+          <div className="flex w-full flex-col gap-2 md:w-auto md:min-w-[200px]">
+            <SkButton variant="sage" icon={Check} onClick={() => confirm(r.id, false)} data-testid="confirm-action">{tr("confirmAct", lang)}</SkButton>
+            <input type="datetime-local" aria-label={tr("editAct", lang)} className="sk-input !min-h-[48px]" value={edit[r.id] ?? ""} onChange={(e) => setEdit({ ...edit, [r.id]: e.target.value })} />
+            <SkButton variant="secondary" icon={PencilLine} disabled={!edit[r.id]} onClick={() => confirm(r.id, true)}>{tr("editAct", lang)}</SkButton>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export default function NurseQueue() {
   const { lang } = useLang();
@@ -15,6 +61,7 @@ export default function NurseQueue() {
   const [toast, setToast] = useState(false);
   const [model, setModel] = useState<ModelInfo | null>(null);
   const [learnedMsg, setLearnedMsg] = useState("");
+  const [tab, setTab] = useState<"queue" | "actions">("queue");
   const seen = useRef<Set<string> | null>(null);
 
   const load = useCallback(() => void api.queue().then((r) => {
@@ -48,6 +95,12 @@ export default function NurseQueue() {
           <BellPlus size={20} aria-hidden />{tr("nurseNew", lang)}
         </div>
       )}
+      <div className="mb-4 flex gap-2" role="tablist">
+        {([["queue", "tabQueue"], ["actions", "tabActions"]] as const).map(([k, key]) => (
+          <button key={k} role="tab" aria-selected={tab === k} data-testid={`tab-${k}`} onClick={() => setTab(k)} className={`min-h-[48px] rounded-full px-5 font-bold ${tab === k ? "sk-btn" : "sk-btn-secondary"}`}>{tr(key, lang)}</button>
+        ))}
+      </div>
+      {tab === "actions" ? <ActionsToConfirm /> : <>
       <h1 className="sk-engraved mb-5 flex items-center gap-3 text-3xl font-bold text-neel-700">{tr("nurseQueue", lang)}
         <span className="rounded-full px-3 py-0.5 text-base text-ink" style={{ background: "linear-gradient(180deg,var(--brass-200),var(--brass-400))", boxShadow: "inset 0 1px 0 #fff9" }}>{rows.length}</span></h1>
       {model && (
@@ -68,7 +121,7 @@ export default function NurseQueue() {
                 style={{ borderTop: i ? "1px solid rgba(120,95,60,.22)" : undefined, background: i % 2 ? "rgba(232,223,205,.35)" : undefined }}>
                 <div className="min-w-0">
                   <p className="text-xs text-ink-muted">{r.case_id.slice(0, 8)} · {new Date(r.created_at).toLocaleTimeString()}</p>
-                  <p className="sk-well mt-1 px-3 py-2 text-sm !rounded-xl">{r.history.filter((h) => h.role === "user").map((h) => h.content).join(" → ")}</p>
+                  <p className="sk-well mt-1 px-3 py-2 text-sm !rounded-xl">{(r.history ?? []).filter((h) => h.role === "user").map((h) => h.content).join(" → ")}</p>
                   <p className="mt-2 text-sm"><b>AI:</b> {r.care_type?.replace(/_/g, " ")} · {r.urgency?.replace("_", "-")}</p>
                   <p className="text-sm text-ink-muted">{r.reasoning}</p>
                   {r.signals?.llm && r.signals?.model && (
@@ -82,7 +135,7 @@ export default function NurseQueue() {
                   <ConfidenceGauge value={r.confidence ?? 0} />
                   <UrgencyLight compact urgency={r.urgency} lang={lang} />
                 </div>
-                <div className="flex min-w-[220px] flex-col gap-2">
+                <div className="flex w-full flex-col gap-2 md:w-auto md:min-w-[220px]">
                   <select aria-label="Care type" className={sel} value={edit[r.case_id]?.care_type ?? r.care_type} onChange={(e) => setEdit({ ...edit, [r.case_id]: { ...edit[r.case_id], care_type: e.target.value } })}>
                     {tax?.care_types.map((c) => <option key={c.id} value={c.id}>{c.id}</option>)}
                   </select>
@@ -97,6 +150,7 @@ export default function NurseQueue() {
           </ul>
         </div>
       )}
+      </>}
     </div>
   );
 }

@@ -4,7 +4,8 @@
 @tailwind components;
 @tailwind utilities;
 
-html { font-size: 18px; }
+/* 112.5% of the browser default (= 18px): browser zoom AND the system/browser font-size setting both scale everything that is in rem */
+html { font-size: 112.5%; -webkit-text-size-adjust: 100%; }
 body { background: var(--paper); color: var(--ink); font-family: var(--font-body); -webkit-font-smoothing: antialiased; }
 #root { position: relative; z-index: 1; }
 h1, h2, h3, .font-display { font-family: var(--font-display); font-optical-sizing: auto; }
@@ -14,3 +15,23 @@ h1, h2, h3, .font-display { font-family: var(--font-display); font-optical-sizin
 .rec { animation: pulse-ring 1.2s infinite; }
 @keyframes flash-red { 0%,100% { background: #FBEAE8; } 50% { background: #F2B8B3; } }
 .escalating { animation: flash-red .6s 3; }
+
+/* >= 16px inside every form control, or iOS Safari zooms the page in on focus */
+input, textarea, select { font-size: max(16px, 1rem); }
+
+/* text-style buttons and links used as actions: still a 44px target */
+.sk-textbtn { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; min-width: 44px; padding: 0 .5rem; border-radius: .5rem; }
+
+/* page-height helper: 100vh fallback, then 100dvh (mobile browser bars) */
+.fill-screen { min-height: calc(100vh - 4rem); min-height: calc(100dvh - 4rem); }
+
+/* Leaflet: big +/- controls (44px), same material as the rest of the app */
+.leaflet-touch .leaflet-bar a, .leaflet-bar a { width: 44px; height: 44px; line-height: 44px; font-size: 22px; }
+.leaflet-container { font-family: inherit; touch-action: pan-x pan-y; }
+
+/* long Hindi words / unbroken strings wrap instead of widening the page ('break-word' only breaks a word that cannot fit on a line of its own;
+   'anywhere' would shrink min-content to one letter and squeeze columns into letter-per-line text) */
+main, header, footer { overflow-wrap: break-word; }
+/* flex / grid children may shrink below their content width (otherwise one long word forces horizontal scroll); icons keep their size */
+:where(.grid, .flex) > * { min-width: 0; }
+svg { flex-shrink: 0; }

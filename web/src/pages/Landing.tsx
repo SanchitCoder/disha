@@ -50,7 +50,7 @@ function Hero() {
   const reduce = useReducedMotion();
   const stage = useRef<HTMLDivElement>(null);
   const move = (e: React.MouseEvent) => {          // soft parallax: desktop pointer only
-    if (reduce || !matchMedia("(hover: hover) and (pointer: fine)").matches || !stage.current) return;
+    if (reduce || !matchMedia("(min-width: 1024px) and (hover: hover) and (pointer: fine)").matches || !stage.current) return;   // parallax only on real desktops: it blurs text and shifts layout when zoomed or on small screens
     const r = stage.current.getBoundingClientRect();
     stage.current.style.setProperty("--px", String(((e.clientX - r.left) / r.width - 0.5) * 2));
     stage.current.style.setProperty("--py", String(((e.clientY - r.top) / r.height - 0.5) * 2));
@@ -76,16 +76,16 @@ function Hero() {
       <div ref={stage} onMouseMove={move} className="relative mx-auto w-full max-w-[420px] py-6" style={{ ["--px" as string]: 0, ["--py" as string]: 0 }}>
         <div style={{ transform: "translate3d(calc(var(--px) * -6px), calc(var(--py) * -6px), 0)" }}>
           <PhoneMockup>
-            <div className="sk-well -mt-6 w-full px-3 py-2.5 text-center text-[13px] font-medium leading-snug text-ink">“{tl("phoneSample", lang)}”</div>
+            <div className="sk-well -mt-6 w-full px-3 py-2.5 text-center text-[0.8rem] font-medium leading-snug text-ink">“{tl("phoneSample", lang)}”</div>
             <MicDome size={124} />
             <p className="text-center text-xs font-semibold text-ink-muted">{lang === "hi" ? "बोलने के लिए दबाएँ" : "Tap to speak"}</p>
             <div className="h-24" aria-hidden />
           </PhoneMockup>
         </div>
-        <div className="absolute -left-2 top-[13rem] hidden w-[10.5rem] -rotate-6 sm:block sm:-left-10" style={{ transform: "translate3d(calc(var(--px) * 12px), calc(var(--py) * 10px), 0) rotate(-6deg)" }}>
+        <div className="absolute -left-2 top-[13rem] hidden w-[10.5rem] -rotate-6 sm:block sm:-left-3" style={{ transform: "translate3d(calc(var(--px) * 6px), calc(var(--py) * 5px), 0) rotate(-6deg)" }}>
           <div className="sk-card p-3"><p className={`mb-1.5 text-xs font-bold text-ink-muted ${lang === "en" ? "uppercase tracking-wide" : ""}`}>{tl("floatUrgency", lang)}</p><UrgencyLight urgency="same_day" lang={lang} compact /></div>
         </div>
-        <div className="absolute -bottom-2 -right-2 hidden w-[14rem] rotate-3 sm:block sm:-right-14" style={{ transform: "translate3d(calc(var(--px) * 16px), calc(var(--py) * 12px), 0) rotate(3deg)" }}>
+        <div className="absolute -bottom-2 -right-2 hidden w-[14rem] rotate-3 sm:block sm:-right-3" style={{ transform: "translate3d(calc(var(--px) * 6px), calc(var(--py) * 5px), 0) rotate(3deg)" }}>
           <CaregiverIDCard compact name="Anita S." role="Medic" rating={4.8} reasons={["Hindi", "3 km", "4 pm"]} />
         </div>
       </div>
@@ -200,7 +200,7 @@ function Different() {
   const cards: { t: LKey; b: LKey; art: ReactNode }[] = [
     { t: "us1T", b: "us1", art: <div className="flex justify-center"><CheckinClock hours={6} size={150} /></div> },
     { t: "us2T", b: "us2", art: <FamilyFrame /> },
-    { t: "us3T", b: "us3", art: <div className="mx-auto max-w-[260px] origin-top scale-[.82] sm:scale-90"><Clipboard title="Visit Brief" bringTitle="To bring" lines={["Father, 60+", "Fever + cough, 2 days", "No breathing trouble"]} bring={["thermometer", "pulse_oximeter", "bp_monitor"]} /></div> },
+    { t: "us3T", b: "us3", art: <div className="mx-auto w-full max-w-[16rem]"><Clipboard title="Visit Brief" bringTitle="To bring" lines={["Father, 60+", "Fever + cough, 2 days", "No breathing trouble"]} bring={["thermometer", "pulse_oximeter", "bp_monitor"]} /></div> },
     { t: "us4T", b: "us4", art: <NurseBadge /> },
   ];
   return (
@@ -210,7 +210,7 @@ function Different() {
         {cards.map((c, i) => (
           <Reveal key={c.t} delay={(i % 2) * 0.08}>
             <SkCard className="flex h-full flex-col">
-              <div className="sk-well mb-4 flex min-h-[300px] items-center justify-center overflow-hidden p-3">{c.art}</div>
+              <div className="sk-well mb-4 flex min-h-[18rem] items-center justify-center overflow-hidden p-3">{c.art}</div>
               <h3 className="font-display text-xl font-bold text-neel-700">{tl(c.t, lang)}</h3>
               <p className="mt-1.5 text-base text-ink-muted">{tl(c.b, lang)}</p>
             </SkCard>

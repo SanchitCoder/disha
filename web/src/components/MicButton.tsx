@@ -66,7 +66,7 @@ export default function MicButton({ onText, size = "big", hint }: { onText: (t: 
           style={{ transform: "scale(calc(1 + var(--lvl, 0) * 0.14))", opacity: "calc(.35 + var(--lvl, 0) * .65)", transition: "transform .06s linear" }} />}
         {on && <span aria-hidden className="rec absolute inset-0 rounded-full" />}
         <button onClick={toggle} disabled={wait} aria-label={label} aria-pressed={on}
-          className="sk-brass-ring relative block h-[168px] w-[168px] transition-transform active:translate-y-1 disabled:opacity-70">
+          className="sk-brass-ring relative block aspect-square w-[min(10.5rem,100%)] transition-transform active:translate-y-1 disabled:opacity-70">
           <span className={`grid h-full w-full place-items-center rounded-full text-white ${on ? "" : "sk-breathe"}`}
             style={{ background: on ? "radial-gradient(circle at 32% 26%, #D9635B 0%, #7B2E5A 45%, #1F2865 100%)" : "radial-gradient(circle at 32% 26%, #8E99DB 0%, #2E3A87 48%, #1F2865 100%)",
               boxShadow: "inset 0 3px 6px rgba(255,255,255,.35), inset 0 -12px 20px rgba(0,0,0,.35), 0 4px 10px rgba(31,40,101,.45)" }}>

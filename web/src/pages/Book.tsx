@@ -35,11 +35,11 @@ export default function Book() {
           <p className="inline-flex items-center gap-2 text-2xl font-bold text-sage"><CalendarCheck aria-hidden /><Bi k="booked" /></p>
           <p className="mt-1 text-lg font-semibold">{String(done.caregiver.name)}</p>
         </div>
-        <div className="flex items-center gap-4 rounded-3xl border-2 border-sage bg-[#E4F1E6] p-4" role="status">
+        <Link to={`/checkin/${caseId}`} data-testid="safety-banner" className="flex items-center gap-4 rounded-3xl border-2 border-sage bg-[#E4F1E6] p-4">
           <CheckinClock hours={6} size={84} />
           <p className="text-lg font-bold text-[#1F4A2A]"><Bi k="safetyOn" subClass="text-sm text-[#2B5535]" /></p>
-        </div>
-        <Clipboard lines={b.summary_lines} bring={b.bring_list} title={tr("visitBrief", lang)} bringTitle={tr("bring", lang)} />
+        </Link>
+        <Clipboard lines={b.summary_lines} bring={b.bring_list} title={tr("visitBrief", lang)} bringTitle={tr("bring", lang)} plan={b.action_plan} planTitle={tr("briefPlan", lang)} />
         <SkButton variant="secondary" size="lg" icon={BellRing} onClick={() => nav(`/checkin/${caseId}`)}>{tr("checkin", lang)}</SkButton>
       </div>
     );
@@ -51,7 +51,7 @@ export default function Book() {
     <div className="flex flex-col gap-5 pb-6">
       <h1 className="sk-engraved text-2xl font-bold text-neel-700"><Bi k="best" /></h1>
       <CaregiverIDCard best bestLabel={tl("bestMatch", lang)} name={cgs[0].name} role={cgs[0].role} rating={cgs[0].rating} reasons={reasons(cgs[0].reason)}
-        action={<SkButton size="lg" icon={CalendarCheck} loading={busyIdx === 0} disabled={busyIdx !== null} onClick={() => book(0)}>{tr("book", lang)}</SkButton>} />
+        action={<SkButton size="lg" icon={CalendarCheck} loading={busyIdx === 0} disabled={busyIdx !== null} onClick={() => book(0)} data-testid="book-top">{tr("book", lang)}</SkButton>} />
       <div className="rounded-3xl p-1.5" style={{ background: "linear-gradient(145deg,var(--brass-200),var(--brass-600))" }}><div className="sk-well overflow-hidden p-1"><MiniMap me={location} caregivers={cgs} /></div></div>
       {cgs.length > 1 && <h2 className="text-lg font-bold text-ink-muted"><Bi k="others" /></h2>}
       {cgs.slice(1).map((c, i) => (
